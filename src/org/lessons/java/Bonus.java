@@ -15,6 +15,7 @@ public class Bonus {
 		String password = "root";
 		Scanner scan = new Scanner(System.in);
 		
+		// Stampa la lista delle Nazioni con le relative Regioni e Continenti
 		try (Connection con = DriverManager.getConnection(url, user, password)) {
 			
 			String sql = "select c.name as 'nome_nazione', c.country_id as 'id_nazione', r.name as 'nome_regione', c2.name as 'nome_continente'\r\n"
@@ -40,7 +41,10 @@ public class Bonus {
 			ex.printStackTrace();
 		} 
 		
-		try (Connection con_2 = DriverManager.getConnection(url, user, password)) {
+		// Chiede di inserire l'id di una Nazione e stampa le lingue che in quella nazione 
+		// si parlano e le sue statistiche più recenti
+		Connection con_2 = DriverManager.getConnection(url, user, password);
+		try {
 			System.out.println("\nRicerca per ID Nazione:");
 			int idNationSearch = Integer.parseInt(scan.nextLine());
 			
@@ -99,7 +103,11 @@ public class Bonus {
 			
 		} catch (Exception ex) {
 			System.out.println("Errore esecuzione multiquery!");
-			//con_2.rollback();
+			con_2.rollback();
+		} finally {
+			if (con_2 != null) {
+				con_2.close();
+			}
 		}
 		
 		scan.close();
