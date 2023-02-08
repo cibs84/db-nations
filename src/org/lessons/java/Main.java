@@ -15,9 +15,6 @@ public class Main {
 		String password = "root";
 		Scanner scan = new Scanner(System.in);
 		
-		System.out.println("Ricerca per nazione:");
-		String nationSearch = scan.nextLine();
-		
 		try (Connection con = DriverManager.getConnection(url, user, password)) {
 			
 			String sql = "select c.name as 'nome_nazione', c.country_id as 'id_nazione', r.name as 'nome_regione', c2.name as 'nome_continente'\r\n"
@@ -26,7 +23,10 @@ public class Main {
 						+ "join continents c2 on c2.continent_id  = r.continent_id \r\n"
 						+ "where c.name like ? \r\n"
 						+ "order by c.name";
+			
 			try (PreparedStatement ps = con.prepareStatement(sql)) {
+				System.out.println("Ricerca per nazione:");
+				String nationSearch = scan.nextLine();
 				
 				ps.setString(1, "%" + nationSearch + "%");
 				
