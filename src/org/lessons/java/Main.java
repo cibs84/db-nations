@@ -15,6 +15,7 @@ public class Main {
 		String password = "root";
 		Scanner scan = new Scanner(System.in);
 		
+		// Stampa la lista delle Nazioni con le relative Regioni e Continenti
 		try (Connection con = DriverManager.getConnection(url, user, password)) {
 			
 			String sql = "select c.name as 'nome_nazione', c.country_id as 'id_nazione', r.name as 'nome_regione', c2.name as 'nome_continente'\r\n"
@@ -23,15 +24,15 @@ public class Main {
 						+ "join continents c2 on c2.continent_id  = r.continent_id \r\n"
 						+ "where c.name like ? \r\n"
 						+ "order by c.name";
-			
+			// PREPARA la query
 			try (PreparedStatement ps = con.prepareStatement(sql)) {
 				System.out.println("Ricerca per nazione:");
 				String nationSearch = scan.nextLine();
 				
 				ps.setString(1, "%" + nationSearch + "%");
-				
+				// ESEGUE la query
 				try (ResultSet rs = ps.executeQuery()) {
-					
+					// STAMPA i risultati della query
 					while (rs.next()) {
 						String nomeNazione = rs.getString("nome_nazione");
 						int idNazione = rs.getInt("id_nazione");
